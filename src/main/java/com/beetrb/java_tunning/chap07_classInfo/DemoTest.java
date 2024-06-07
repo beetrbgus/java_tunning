@@ -1,6 +1,7 @@
 package com.beetrb.java_tunning.chap07_classInfo;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class DemoTest {
@@ -15,10 +16,8 @@ public class DemoTest {
         Class demoClass = clazz.getClass();
         getClassInfo(demoClass);
          getFieldInfo(demoClass);
-        // getMethodInfo(demoClass);
+         getMethodInfo(demoClass);
     }
-
-
 
     public void getClassInfo(Class demoClass) {
         String className = demoClass.getName();
@@ -34,8 +33,58 @@ public class DemoTest {
         System.out.println("toString :  " + toString);
     }
 
+    public void getMethodInfo(Class demoClass) {
+        System.out.println("------------------- Method Info ----------------------");
+        Method[] method1 = demoClass.getDeclaredMethods();
+        Method[] method2 = demoClass.getMethods();
+
+        System.out.println("Declare Methods : " + method1.length + "  Methods : " + method2.length);
+
+        for (Method met1 : method1) {
+            String name = met1.getName();
+            int modifiers = met1.getModifiers();
+            String modifierStr = Modifier.toString(modifiers);
+            String returnType = met1.getReturnType().getSimpleName();
+            Class params[] = met1.getParameterTypes();
+
+            StringBuilder sb = new StringBuilder();
+            int paramLength = params.length;
+
+            if(paramLength != 0) {
+                sb.append(params[0].getSimpleName()).append(" arg");
+
+                for (int i = 1; i < paramLength; i++) {
+                    sb.append(", ")
+                        .append(params[i].getName())
+                        .append(" arg").append(i);
+                }
+            }
+
+            Class exceptions[] = met1.getExceptionTypes();
+            StringBuilder eb = new StringBuilder();
+            int exceptionLength = exceptions.length;
+
+            if(exceptionLength != 0) {
+                eb.append("throws ")
+                    .append(exceptions[0].getName());
+
+                for (int i = 1; i < exceptionLength; i++) {
+                    eb.append(", ")
+                        .append(exceptions[i].getSimpleName());
+                }
+            }
+
+            System.out.println("name   : "  + name);
+            System.out.println("modifierStr   : "  + modifierStr);
+            System.out.println("returnType   : "  + returnType);
+            System.out.println("sb   : "  + sb);
+            System.out.println("eb   : "  + eb);
+
+        }
+    }
+
     public void getFieldInfo(Class demoClass) {
-        System.out.println("-----------------------------------------");
+        System.out.println("-------------------- FieldInfo ---------------------");
 
         Field[] field1 = demoClass.getDeclaredFields();
         Field[] field2 = demoClass.getFields();
